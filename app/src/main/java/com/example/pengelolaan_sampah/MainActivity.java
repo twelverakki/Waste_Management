@@ -1,7 +1,8 @@
 package com.example.pengelolaan_sampah;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,60 +10,44 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
+import com.google.android.material.button.MaterialButton;
 
 public class MainActivity extends AppCompatActivity {
-
-    private MapView map = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // Load osmdroid configuration
-        Configuration.getInstance().load(getApplicationContext(), PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
-        Configuration.getInstance().setUserAgentValue(getPackageName());
-
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
-        // Map setup must be done AFTER setContentView
-        map = findViewById(R.id.mapView);
-        if (map != null) {
-            map.setTileSource(TileSourceFactory.MAPNIK);
-            map.setBuiltInZoomControls(true);
-            map.setMultiTouchControls(true);
-            
-            IMapController mapController = map.getController();
-            mapController.setZoom(16.0);
-            GeoPoint makassarPoint = new GeoPoint(-5.1476, 119.4327); // Koordinat Makassar
-            mapController.setCenter(makassarPoint);
-        }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (map != null) {
-            map.onResume();
-        }
-    }
+        // Inisialisasi Button
+        MaterialButton btnRequestJemput = findViewById(R.id.btnRequestJemput);
+        MaterialButton btnRiwayat = findViewById(R.id.btnRiwayat);
+        MaterialButton btnProfil = findViewById(R.id.btnProfil);
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (map != null) {
-            map.onPause();
-        }
+        // Set OnClickListener
+        btnRequestJemput.setOnClickListener(v -> {
+            // Intent ke halaman Request Jemput
+            Toast.makeText(MainActivity.this, "Membuka Buat Request Jemput", Toast.LENGTH_SHORT).show();
+            // startActivity(new Intent(MainActivity.this, RequestJemputActivity.class));
+        });
+
+        btnRiwayat.setOnClickListener(v -> {
+            // Intent ke halaman Riwayat
+            Toast.makeText(MainActivity.this, "Membuka Riwayat Saya", Toast.LENGTH_SHORT).show();
+            // startActivity(new Intent(MainActivity.this, RiwayatActivity.class));
+        });
+
+        btnProfil.setOnClickListener(v -> {
+            // Intent ke halaman Profil
+            Toast.makeText(MainActivity.this, "Membuka Profil & Laporan", Toast.LENGTH_SHORT).show();
+            // startActivity(new Intent(MainActivity.this, ProfilActivity.class));
+        });
     }
 }
